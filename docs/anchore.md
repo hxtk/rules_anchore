@@ -36,7 +36,7 @@ a dependency on the external vulnerability database.
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="grype_test-name"></a>name |  the name of the label to be created.   |  none |
-| <a id="grype_test-image"></a>image |  the complete docker image TAR, compatible with <code>docker save</code>.   |  <code>None</code> |
+| <a id="grype_test-image"></a>image |  the complete docker image TAR, compatible with <code>docker save</code>; a label for a <code>container_image</code> rule; or a label for an imported image (i.e., <code>@foo//image</code> for a <code>container_pull(name = "foo", ...)</code> repository rule.   |  <code>None</code> |
 | <a id="grype_test-sbom"></a>sbom |  the Anchore Syft SBOM of the image, formatted as JSON. See <code>syft_sbom</code> rule above.   |  <code>None</code> |
 | <a id="grype_test-fail_on_severity"></a>fail_on_severity |  the test built by this target shall fail if any CVE is found at this severity or higher. Defaults to "low", which may produce results that users consider to be false positives.   |  <code>"low"</code> |
 | <a id="grype_test-scope"></a>scope |  if "Squashed", only scan the effective file system of the final image. If "All", scan every file in each layer, including those that are overwritten or deleted in the final image.   |  <code>"Squashed"</code> |
@@ -51,6 +51,18 @@ a dependency on the external vulnerability database.
 syft_sbom(<a href="#syft_sbom-name">name</a>, <a href="#syft_sbom-image">image</a>, <a href="#syft_sbom-scope">scope</a>, <a href="#syft_sbom-kwargs">kwargs</a>)
 </pre>
 
+Create an SBOM for an image.
+
+Uses Anchore Syft to create a Software Bill of Materials for a container
+image.
+
+The user is required to provide `name` and `image`; all other fields have
+sane defaults.
+
+Note that if one is also creating a `grype_test` rule for the same image,
+one may specify this target as the `sbom` for that `grype_test`, or else
+use the `[name]_sbom` target implicitly created by `grype_test` in lieu of
+explicitly invoking this macro.
 
 
 **PARAMETERS**
@@ -58,9 +70,9 @@ syft_sbom(<a href="#syft_sbom-name">name</a>, <a href="#syft_sbom-image">image</
 
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
-| <a id="syft_sbom-name"></a>name |  <p align="center"> - </p>   |  none |
-| <a id="syft_sbom-image"></a>image |  <p align="center"> - </p>   |  none |
-| <a id="syft_sbom-scope"></a>scope |  <p align="center"> - </p>   |  <code>"Squashed"</code> |
+| <a id="syft_sbom-name"></a>name |  the name of the label to be created.   |  none |
+| <a id="syft_sbom-image"></a>image |  the complete docker image TAR, compatible with <code>docker save</code>; a label for a <code>container_image</code> rule; or a label for an imported image (i.e., <code>@foo//image</code> for a <code>container_pull(name = "foo", ...)</code> repository rule.   |  none |
+| <a id="syft_sbom-scope"></a>scope |  if "Squashed", only scan the effective file system of the final image. If "All", scan every file in each layer, including those that are overwritten or deleted in the final image.   |  <code>"Squashed"</code> |
 | <a id="syft_sbom-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
