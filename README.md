@@ -76,6 +76,6 @@ grype_test(
 )
 ```
 
-For detailed documentation, see [`//docs:anchore.md`](docs/anchore.md)
+For detailed documentation, see [`//docs:anchore.md`](docs/anchore.md).
 
 For usage examples, see [`//examples:BUILD`](examples/BUILD).
