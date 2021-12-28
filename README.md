@@ -67,13 +67,15 @@ grype_test(
     image = ":foo",
     fail_on_severity = "high",
     tags = [
-        "manual",    # To avoid breaking CI on vulnerabilities
-        "external",
-        "large",
+        "manual",    # To avoid breaking CI on vulnerabilities.
+        "external",  # This tag will be added implicitly if omitted, as
+                     # we depend on the CVE database fetched from the internet.
+        "large",     # Checking and updating the CVE database can take quite
+                     # some time.
     ],
 )
 ```
 
-For detailed documentation, see [`//docs/anchore.md`](docs/anchore.md)
+For detailed documentation, see [`//docs:anchore.md`](docs/anchore.md)
 
 For usage examples, see [`//examples:BUILD`](examples/BUILD).
