@@ -1,8 +1,6 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
-exports_files([":anchore.bzl"], visibility="//docs:__pkg__")
-
-# gazelle:prefix github.com/hxtk/yggdrasil
+# gazelle:prefix github.com/hxtk/rules_anchore
 gazelle(name = "gazelle")
 
 gazelle(
