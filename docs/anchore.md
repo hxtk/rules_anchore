@@ -3,7 +3,7 @@
 
 Generated API documentation for Anchore rules.
 
-Load these from `@com_github_hxtk_rules_anchore//anchore.bzl`.
+Load these from `@com_github_hxtk_rules_anchore//anchore:anchore.bzl`.
 
 <a id="#grype_test"></a>
 

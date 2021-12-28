@@ -1,7 +1,7 @@
 """
 Generated API documentation for Anchore rules.
 
-Load these from `@com_github_hxtk_rules_anchore//anchore.bzl`.
+Load these from `@com_github_hxtk_rules_anchore//anchore:anchore.bzl`.
 """
 
 load("//anchore:anchore.bzl", _syft_sbom = "syft_sbom", _grype_test = "grype_test")
