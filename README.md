@@ -26,7 +26,7 @@ dependencies are licensed under the Apache 2.0 license.
 ```starlark
 http_archive(
   # Get copy paste instructions for the http_archive attributes from the
-  # release notes at https://github.com/bazelbuild/rules_docker/releases
+  # release notes at https://github.com/hxtk/rules_anchore/releases
 )
 
 # If your project does not have a Go toolchain configured (see
