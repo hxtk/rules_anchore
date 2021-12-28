@@ -76,16 +76,17 @@ def syft_sbom(name, image, scope="Squashed", **kwargs):
             image.
     """
     if not image.endswith(".tar"):
-        print("""A `docker save`-compatible TAR is expected as input. 
-              Note that the default output of container_image targets is
-              a container layer TAR. We have implicitly used the target
-              {}.tar, which is the full `docker-save`-compatible TAR of
-              the image.""".format(image))
         if ":" in image:
             image = image + ".tar"
         else:
             _, _, package = image.rpartition("/")
             image = image + ":{}.tar".format(package)
+        print("""A `docker save`-compatible TAR is expected as input. 
+              Note that the default output of container_image targets is
+              a container layer TAR. We have implicitly used the target
+              {}, which is the full `docker-save`-compatible TAR of
+              the image. This message can be suppressed by specifying
+              that target explicitly.""".format(image))
 
     _syft_sbom(
         name = name,
