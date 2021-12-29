@@ -29,24 +29,6 @@ http_archive(
   # release notes at https://github.com/hxtk/rules_anchore/releases
 )
 
-# If your project does not have a Go toolchain configured (see
-# https://github.com/bazelbuild/bazel-gazelle) then it is necessary to
-# configure one here:
-load("@com_github_hxtk_rules_anchore//:go_deps.bzl", "go_dependencies")
-
-go_dependencies()
-
-load("@com_github_hxtk_rules_anchore//:deps.bzl", "go_toolchain")
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
-
-go_rules_dependencies()
-go_register_toolchains(version = "1.17.2")
-gazelle_dependencies()
-
-# End Go Toolchain section.
-
 load("@com_github_hxtk_rules_anchore//:deps.bzl", "anchore_deps")
 
 anchore_deps()
@@ -65,6 +47,7 @@ container_image(
 grype_test(
     name = "foo_cve_scan",
     image = ":foo",
+    only_fixed = True,
     fail_on_severity = "high",
     tags = [
         "manual",    # To avoid breaking CI on vulnerabilities.
