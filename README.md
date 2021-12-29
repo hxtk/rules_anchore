@@ -33,11 +33,10 @@ load("@com_github_hxtk_rules_anchore//:deps.bzl", "anchore_deps")
 
 anchore_deps()
 
-# At present, these two lines are only necessary if you are NOT already
-# using [`io_bazel_rules_go`](https://github.com/bazelbuild/rules_go).
-# This is subject to change in future versions.
 load("//:extra_deps.bzl", "anchore_extra_deps")
 
+# By default, this method configures a Go toolchain. If you have already
+# configured a Go toolchain in your WORKSPACE, pass `configure_go=False`.
 anchore_extra_deps()
 ```
 
