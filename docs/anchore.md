@@ -26,8 +26,9 @@ If 'image' is passed in, a `syft_sbom` rule named `[name]_sbom` is
 implicitly created, and the `grype_test` uses the `sbom` produced
 by that target.
 
-All tests created by this macro will be tagged as 'external' due to
-a dependency on the external vulnerability database.
+All tests created by this macro without a value passed for 'database'
+will be tagged as 'external' due to their undeclared dependency on
+Anchore's database.
 
 
 **PARAMETERS**
