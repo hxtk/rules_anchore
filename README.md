@@ -33,7 +33,7 @@ load("@com_github_hxtk_rules_anchore//:deps.bzl", "anchore_deps")
 
 anchore_deps()
 
-load("//:extra_deps.bzl", "anchore_extra_deps")
+load("@com_github_hxtk_rules_anchore//:extra_deps.bzl", "anchore_extra_deps")
 
 # By default, this method configures a Go toolchain. If you have already
 # configured a Go toolchain in your WORKSPACE, pass `configure_go=False`.
