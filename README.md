@@ -100,7 +100,8 @@ grype_test(
 ```
 
 Then, on a regular basis, simply run `bazel run //:update-grype` to update it.
-For detailed documentation, see [`//docs:anchore.md`](docs/anchore.md).
+For detailed documentation, see
+[`//docs:anchore.md#grype_updater`](docs/anchore.md#grype_updater).
 
 This also makes a convenient time to rerun all of your `grype_test` rules which use
 the pinned database in order to scan for newly-discovered vulnerabilities independent
