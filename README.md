@@ -9,7 +9,7 @@ compatible with
 [`io_bazel_rules_docker`](https://github.com/bazelbuild/rules_docker).
 In particular, `container_image` and `container_pull` targets are supported.
 
-## Affiliation/Disclaimer.
+## Affiliation/Disclaimer
 
 This repository and its owners are not affiliated with Anchore, Inc.
 in any way. The various Anchore™ open source products used by these
