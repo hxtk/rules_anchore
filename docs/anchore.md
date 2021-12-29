@@ -10,7 +10,7 @@ Load these from `@com_github_hxtk_rules_anchore//anchore:anchore.bzl`.
 ## grype_test
 
 <pre>
-grype_test(<a href="#grype_test-name">name</a>, <a href="#grype_test-image">image</a>, <a href="#grype_test-sbom">sbom</a>, <a href="#grype_test-fail_on_severity">fail_on_severity</a>, <a href="#grype_test-scope">scope</a>, <a href="#grype_test-kwargs">kwargs</a>)
+grype_test(<a href="#grype_test-name">name</a>, <a href="#grype_test-image">image</a>, <a href="#grype_test-sbom">sbom</a>, <a href="#grype_test-only_fixed">only_fixed</a>, <a href="#grype_test-database">database</a>, <a href="#grype_test-fail_on_severity">fail_on_severity</a>, <a href="#grype_test-scope">scope</a>, <a href="#grype_test-kwargs">kwargs</a>)
 </pre>
 
 Scan a docker image for CVEs.
@@ -39,6 +39,8 @@ Anchore's database.
 | <a id="grype_test-name"></a>name |  the name of the label to be created.   |  none |
 | <a id="grype_test-image"></a>image |  the complete docker image TAR, compatible with <code>docker save</code>; a label for a <code>container_image</code> rule; or a label for an imported image (i.e., <code>@foo//image</code> for a <code>container_pull(name = "foo", ...)</code> repository rule.   |  <code>None</code> |
 | <a id="grype_test-sbom"></a>sbom |  the Anchore Syft SBOM of the image, formatted as JSON. See <code>syft_sbom</code> rule above.   |  <code>None</code> |
+| <a id="grype_test-only_fixed"></a>only_fixed |  if True, ignore any vulnerabilities that do not have fixes available, even if they are above the failure threshold. Defaults to False.   |  <code>False</code> |
+| <a id="grype_test-database"></a>database |  the Anchore CVE database against which to evaluate the image or SBOM. By default, we download the latest database and load it.   |  <code>None</code> |
 | <a id="grype_test-fail_on_severity"></a>fail_on_severity |  the test built by this target shall fail if any CVE is found at this severity or higher. Defaults to "low", which may produce results that users consider to be false positives.   |  <code>"low"</code> |
 | <a id="grype_test-scope"></a>scope |  if "Squashed", only scan the effective file system of the final image. If "All", scan every file in each layer, including those that are overwritten or deleted in the final image.   |  <code>"Squashed"</code> |
 | <a id="grype_test-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |

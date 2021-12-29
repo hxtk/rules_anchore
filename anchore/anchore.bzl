@@ -260,7 +260,16 @@ _grype_test = rule(
     implementation = _grype_test_impl,
 )
 
-def grype_test(name, image=None, sbom=None, fail_on_severity="low", scope="Squashed", **kwargs):
+def grype_test(
+    name,
+    image = None,
+    sbom = None,
+    only_fixed = False,
+    database = None,
+    fail_on_severity = "low",
+    scope = "Squashed",
+    **kwargs,
+):
     """Scan a docker image for CVEs.
 
     Uses Anchore Grype to scan a docker image or Anchore Syft SBOM for
@@ -323,6 +332,8 @@ def grype_test(name, image=None, sbom=None, fail_on_severity="low", scope="Squas
         sbom = sbom,
         fail_on_severity = fail_on_severity,
         scope = scope,
+        database = database,
+        only_fixed = only_fixed,
         grype_ = select({
             "@bazel_tools//src/conditions:host_windows": "@grype_windows//:grype.exe",
             "@bazel_tools//src/conditions:darwin_x86_64": "@grype_darwin_amd64//:grype",
