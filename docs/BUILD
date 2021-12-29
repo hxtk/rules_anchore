@@ -17,8 +17,8 @@ stardoc(
     name = "anchore_doc",
     out = "anchore.md_",
     header_template = ":header.vm",
-    input = "//anchore:anchore.docs.bzl",
-    deps = ["//anchore:anchore.docs"],
+    input = "//anchore:defs.bzl",
+    deps = ["//anchore:defs"],
 )
 
 # If these fail, run `bazel run //docs:update`

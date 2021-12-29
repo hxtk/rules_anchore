@@ -1,5 +1,5 @@
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-load("//anchore:defs.bzl", "syft_sbom", "grype_test")
+load("@com_github_hxtk_rules_anchore//anchore:anchore.bzl", "grype_test")
 
 grype_test(
     name = "basic_test",

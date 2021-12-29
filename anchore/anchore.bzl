@@ -279,11 +279,11 @@ def grype_test(
     The user is required to provide 'name' as well as exactly one of
     'image' or 'sbom'. All other fields have sane defaults.
 
-    If 'image' is passed in, a `syft_sbom` rule named `[name]_sbom` is
+    If `image` is passed in, a `syft_sbom` rule named `[name]_sbom` is
     implicitly created, and the `grype_test` uses the `sbom` produced
     by that target.
 
-    All tests created by this macro without a value passed for 'database'
+    All tests created by this macro without a value passed for `database`
     will be tagged as 'external' due to their undeclared dependency on
     Anchore's database.
 
@@ -294,7 +294,7 @@ def grype_test(
             image (i.e., `@foo//image` for a
             `container_pull(name = "foo", ...)` repository rule.
         sbom: the Anchore Syft SBOM of the image, formatted as JSON. See
-            `syft_sbom` rule above.
+            `syft_sbom` rule.
         database: the Anchore CVE database against which to evaluate the image
             or SBOM. By default, we download the latest database and load it.
         fail_on_severity: the test built by this target shall fail if any
@@ -309,7 +309,9 @@ def grype_test(
             including those that are overwritten or deleted in the final
             image.
     """
-    if image:
+    if image != None and sbom != None:
+        fail("Exactly one of sbom and image must be provided.")
+    elif image:
         sbom = name + "_sbom"
         syft_sbom(
             name = sbom,
@@ -318,9 +320,9 @@ def grype_test(
     elif sbom == None:
         fail("Exactly one of sbom and image must be provided.")
 
-    # Ensure this test is tagged as external because it depends on the
-    # external Database.
-    if 'database' not in kwargs:
+    # Ensure this test is tagged as external if it checks the internet
+    # for its CVE Database.
+    if database == None:
         if 'tags' in kwargs:
             if 'external' not in kwargs['tags']:
                 kwargs['tags'].append('external')

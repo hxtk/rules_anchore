@@ -3,7 +3,7 @@
 
 Generated API documentation for Anchore rules.
 
-Load these from `@com_github_hxtk_rules_anchore//anchore:anchore.bzl`.
+Load these from `@com_github_hxtk_rules_anchore//anchore:defs.bzl`.
 
 <a id="#grype_test"></a>
 
@@ -22,11 +22,11 @@ severity threshold are found.
 The user is required to provide 'name' as well as exactly one of
 'image' or 'sbom'. All other fields have sane defaults.
 
-If 'image' is passed in, a `syft_sbom` rule named `[name]_sbom` is
+If `image` is passed in, a `syft_sbom` rule named `[name]_sbom` is
 implicitly created, and the `grype_test` uses the `sbom` produced
 by that target.
 
-All tests created by this macro without a value passed for 'database'
+All tests created by this macro without a value passed for `database`
 will be tagged as 'external' due to their undeclared dependency on
 Anchore's database.
 
@@ -38,12 +38,49 @@ Anchore's database.
 | :------------- | :------------- | :------------- |
 | <a id="grype_test-name"></a>name |  the name of the label to be created.   |  none |
 | <a id="grype_test-image"></a>image |  the complete docker image TAR, compatible with <code>docker save</code>; a label for a <code>container_image</code> rule; or a label for an imported image (i.e., <code>@foo//image</code> for a <code>container_pull(name = "foo", ...)</code> repository rule.   |  <code>None</code> |
-| <a id="grype_test-sbom"></a>sbom |  the Anchore Syft SBOM of the image, formatted as JSON. See <code>syft_sbom</code> rule above.   |  <code>None</code> |
+| <a id="grype_test-sbom"></a>sbom |  the Anchore Syft SBOM of the image, formatted as JSON. See <code>syft_sbom</code> rule.   |  <code>None</code> |
 | <a id="grype_test-only_fixed"></a>only_fixed |  if True, ignore any vulnerabilities that do not have fixes available, even if they are above the failure threshold. Defaults to False.   |  <code>False</code> |
 | <a id="grype_test-database"></a>database |  the Anchore CVE database against which to evaluate the image or SBOM. By default, we download the latest database and load it.   |  <code>None</code> |
 | <a id="grype_test-fail_on_severity"></a>fail_on_severity |  the test built by this target shall fail if any CVE is found at this severity or higher. Defaults to "low", which may produce results that users consider to be false positives.   |  <code>"low"</code> |
 | <a id="grype_test-scope"></a>scope |  if "Squashed", only scan the effective file system of the final image. If "All", scan every file in each layer, including those that are overwritten or deleted in the final image.   |  <code>"Squashed"</code> |
 | <a id="grype_test-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
+
+
+<a id="#grype_updater"></a>
+
+## grype_updater
+
+<pre>
+grype_updater(<a href="#grype_updater-name">name</a>, <a href="#grype_updater-version">version</a>, <a href="#grype_updater-repository_name">repository_name</a>, <a href="#grype_updater-listing_url">listing_url</a>, <a href="#grype_updater-kwargs">kwargs</a>)
+</pre>
+
+Automatically update Grype database.
+
+Run this target with `bazel run` to update your Anchore CVE database
+to be used by these rules using Bazel.
+
+For example, in `//:BUILD`:
+
+```starlark
+load("com_github_hxtk_rules_anchore//anchore:defs.bzl", "grype_updater")
+
+grype_updater(
+    name = "update_grype",
+    output = "deps.bzl#grype_database",
+)
+```
+
+
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :------------- | :------------- | :------------- |
+| <a id="grype_updater-name"></a>name |  the name of the label to be created. This is the target you will invoke with <code>bazel run</code>.   |  none |
+| <a id="grype_updater-version"></a>version |  the database format major version. This should generally be left as the default, as it must be chosen to be compatible with the version of Grype in this package.   |  <code>3</code> |
+| <a id="grype_updater-repository_name"></a>repository_name |  the name of the repository to be created. You will reference the database as <code>@[repository_name]//file</code> in the <code>database</code> field of a <code>grype_test</code> rule. For example, with the default value, you would use <code>@grype_database//file</code>.   |  <code>"grype_database"</code> |
+| <a id="grype_updater-listing_url"></a>listing_url |  the URL from which the list of available databases shall be fetched. Defaults to the Anchore listing normally used by Grype.   |  <code>None</code> |
+| <a id="grype_updater-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
 <a id="#syft_sbom"></a>
