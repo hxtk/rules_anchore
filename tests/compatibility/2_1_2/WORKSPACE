@@ -53,3 +53,7 @@ http_file(
     sha256 = "9721e633543bb663814fad30a6f84f8f5de2fedcaaaea42547490ffb18e1f360",
     urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2021-06-01T20:56:41Z.tar.gz"],
 )
+
+load("//:deps.bzl", "grype_db")
+
+grype_db()
