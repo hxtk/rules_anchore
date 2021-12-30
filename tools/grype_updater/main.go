@@ -121,7 +121,7 @@ func main() {
 func writeOutput(entry *httpFile, outStr string) {
 	// Generate the managed block.
 	parts := strings.Split(outStr, "#")
-	managedBlock := startDelimiter + "\n" + loadStatement + "\n"
+	managedBlock := startDelimiter + "\n"
 	if len(parts) >= 2 {
 		managedBlock += fmt.Sprintf("def %s():\n", parts[1])
 		managedBlock += indent(entry.String(), "    ")
@@ -132,6 +132,7 @@ func writeOutput(entry *httpFile, outStr string) {
 
 	// If the file name was "-", we print to stdout and return.
 	if parts[0] == "-" {
+		fmt.Println(loadStatement)
 		fmt.Print(managedBlock)
 		return
 	}
@@ -145,6 +146,11 @@ func writeOutput(entry *httpFile, outStr string) {
 			log.Fatalf("Error creating output file: %v.", err)
 		}
 		defer f.Close()
+
+		_, err = io.WriteString(f, loadStatement+"\n")
+		if err != nil {
+			log.Fatalf("Error writing output to file: %v.", err)
+		}
 
 		_, err = io.WriteString(f, managedBlock)
 		if err != nil {
@@ -163,6 +169,20 @@ func writeOutput(entry *httpFile, outStr string) {
 	temp, err := os.CreateTemp(path.Dir(filePath), path.Base(filePath)+"-*")
 	if err != nil {
 		log.Fatalf("Error creating temporary file: %v.", err)
+	}
+
+	if hasLoad, err := hasLoadStatement(f); err != nil {
+		log.Fatalf("Error checking for load statement: %v.", err)
+	} else if !hasLoad {
+		_, err = fmt.Fprintln(temp, loadStatement)
+		if err != nil {
+			log.Fatalf("Error writing output to file: %v.", err)
+		}
+	}
+
+	_, err = f.Seek(0, io.SeekStart)
+	if err != nil {
+		log.Fatalf("Error seeking start of file: %v.", err)
 	}
 
 	// We copy the original file line by line, searching for our managed block.
@@ -222,6 +242,21 @@ func writeOutput(entry *httpFile, outStr string) {
 	if err != nil {
 		log.Fatalf("Error renaming new file: %v.", err)
 	}
+}
+
+// TODO: This method is dumb and can't recognize load statements with multiple
+// clauses or split across multiple lines. Need to collapse whitespace.
+func hasLoadStatement(f *os.File) (bool, error) {
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		if scanner.Text() == loadStatement {
+			return true, nil
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return false, err
+	}
+	return false, nil
 }
 
 func getHTTPFile(items []item) (*httpFile, error) {
