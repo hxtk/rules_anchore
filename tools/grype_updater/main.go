@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -244,19 +245,13 @@ func writeOutput(entry *httpFile, outStr string) {
 	}
 }
 
-// TODO: This method is dumb and can't recognize load statements with multiple
-// clauses or split across multiple lines. Need to collapse whitespace.
-func hasLoadStatement(f *os.File) (bool, error) {
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		if scanner.Text() == loadStatement {
-			return true, nil
-		}
-	}
-	if err := scanner.Err(); err != nil {
+func hasLoadStatement(f io.Reader) (bool, error) {
+	data, err := io.ReadAll(f)
+	if err != nil {
 		return false, err
 	}
-	return false, nil
+
+	return loadStatementRegex.Match(data), nil
 }
 
 func getHTTPFile(items []item) (*httpFile, error) {
@@ -273,4 +268,10 @@ func getHTTPFile(items []item) (*httpFile, error) {
 		}, nil
 	}
 	return nil, fmt.Errorf("no well-formed entries found")
+}
+
+var loadStatementRegex *regexp.Regexp
+
+func init() {
+	loadStatementRegex = regexp.MustCompile(`(?m)^load\([\n\s]*"@bazel_tools//tools/build_defs/repo:http\.bzl"[\n\s]*,([\n\s]*([a-zA-Z0-9_]+[\n\s]*=[\n\s]*)?"[a-zA-Z0-9_-]+"[\n\s]*,)*[\n\s]*(http_file[\n\s]*=[\n\s]*)?"http_file"[\s\n]*(,?[\s\n]*\)|,[\s\n]*([\n\s]*([a-zA-Z0-9_]+[\n\s]*=[\n\s]*)?"[a-zA-Z0-9_-]+"[\n\s]*,)*[\s\n]*([\n\s]*([a-zA-Z0-9_]+[\n\s]*=[\n\s]*)?"[a-zA-Z0-9_-]+"[\n\s]*)?\))$`)
 }

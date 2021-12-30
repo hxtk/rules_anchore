@@ -28,6 +28,7 @@ grype_test(
 grype_test(
     name = "only_fixed_test",
     image = ":server_image.tar",
+    database = "@grype_database//file",
     only_fixed = True,
     tags = [
         "large",
@@ -37,7 +38,7 @@ grype_test(
 grype_test(
     name = "database_test",
     image = ":server_image.tar",
-    database = "@cve_database//file",
+    database = "@outdated_cve_database//file",
     tags = [
         "large",
     ],
