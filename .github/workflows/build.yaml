@@ -10,9 +10,32 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build
         run: tools/bazel build //...
+      - name: Update Documentation
+        run: tools/bazel run docs:update
+      - name: Commit updated documentation
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'main'
+          commit-message: 'Update documentation'
+          force-add: 'true'
+          files: docs/anchore.md
+          name: Github Actions
+          email: github-actions@psanders.me
       - name: Test
         run: tools/bazel test //...
-      - name: Compatibility Build
+
+      - name: Compatibility Build 2.0.0
         run: cd tests/compatibility/2_0_0 && ../../../tools/bazel build //...
-      - name: Compatibility Test
+      - name: Compatibility Test 2.0.0
         run: cd tests/compatibility/2_0_0 && ../../../tools/bazel test //...
+
+      - name: Compatibility Build 2.1.0
+        run: cd tests/compatibility/2_1_0 && ../../../tools/bazel build //...
+      - name: Compatibility Test 2.1.0
+        run: cd tests/compatibility/2_1_0 && ../../../tools/bazel test //...
+
+      - name: Compatibility Build 2.1.2
+        run: cd tests/compatibility/2_1_2 && ../../../tools/bazel build //...
+      - name: Compatibility Test 2.1.2
+        run: cd tests/compatibility/2_1_2 && ../../../tools/bazel test //...
