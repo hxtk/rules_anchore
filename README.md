@@ -106,7 +106,7 @@ For detailed documentation, see
 This also makes a convenient time to rerun all of your `grype_test` rules which use
 the pinned database in order to scan for newly-discovered vulnerabilities independent
 of any changes to your code. For example, with the above `//:BUILD` file, a nightly CI
-job could be configured to run
+job could be configured to run something like the following:
 
 ```
 bazel run //:update-grype
@@ -117,3 +117,29 @@ git add WORKSPACE
 git commit -m "automated CVE database update"
 git push
 ```
+
+For an example, see
+[`//.github/workflows/update_grype.yaml`](.github/workflows/update_grype.yaml).
+Note that in practice, you may wish to update more frequently than the weekly
+schedule in that example.
+
+## On Versioning, Production-Readiness, and Stability
+
+This repository's releases are versioned with
+[Semantic Versioning](https://semver.org/). It is intended that, for example,
+any repository set up with v2.0.0 can change nothing but the `http_archive`
+rule in their WORKSPACE dependencies to upgrade it to any v2.y.z, and
+everything that worked with v2.0.0 will continue to work.
+
+Additionally, to avoid the risk of accidentally implementing
+[0ver](https://0ver.org/) instead of semver, the first release was v1.0.0. If
+there are breaking changes to a documented use case, the major version will
+increment. This is not an indicator of production-readiness. This is a hobby
+project, and production-readiness is subjective.
+
+This use of semver is also not a stability guarantee. If a desired change
+cannot be made in a non-breaking fashion, the change will be made and the
+major version will increment. It is unlikely that any version behind `HEAD`
+will receive much if any first-party support. This project's release version
+numbers reflect only the kinds of changes between two releases; no more, and
+no less.
