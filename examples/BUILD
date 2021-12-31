@@ -18,9 +18,12 @@ container_image(
 grype_test(
     name = "fail_on_severity_test",
     image = ":server_image",
-    fail_on_severity = "critical",
+    database = "@grype_database//file",
+    fail_on_severity = "high",
+    ignore_cves = [
+        "CVE-2021-33574",
+    ],
     tags = [
-        "manual",
         "large",
     ],
 )

@@ -77,17 +77,18 @@ def syft_sbom(name, image, scope="Squashed", **kwargs):
             image.
     """
     if not image.endswith(".tar"):
+        original = image
         if ":" in image:
             image = image + ".tar"
         else:
             _, _, package = image.rpartition("/")
             image = image + ":{}.tar".format(package)
-        print("""A `docker save`-compatible TAR is expected as input. 
-              Note that the default output of container_image targets is
-              a container layer TAR. We have implicitly used the target
-              {}, which is the full `docker-save`-compatible TAR of
-              the image. This message can be suppressed by specifying
-              that target explicitly.""".format(image))
+        print(
+            "Image label {} converted to canonical form {}.".format(
+                original,
+                image,
+            )
+        )
 
     _syft_sbom(
         name = name,
@@ -129,6 +130,7 @@ _grype_config = """
 db:
   auto-update: {auto_update}
   cache-dir: "$RUNFILES_DIR/grype-db"
+ignore: {ignore_cves}
 """
 
 def _grype_test_impl(ctx):
@@ -144,11 +146,17 @@ def _grype_test_impl(ctx):
     if ctx.file.database:
         auto_update = "false"
 
+    ignore_cves = '[' + ", ".join(["vulnerability: '" + cve + "'" for cve in ctx.attr.ignore_cves]) + ']'
+    print(ignore_cves)
+
     config_file = ctx.actions.declare_file(ctx.label.name + "-config.yaml")
     ctx.actions.write(
         output = config_file,
         is_executable = False,
-        content = _grype_config.format(auto_update=auto_update),
+        content = _grype_config.format(
+            auto_update=auto_update,
+            ignore_cves=ignore_cves
+	),
     )
 
     if ctx.attr.is_windows:
@@ -240,6 +248,10 @@ _grype_test = rule(
                 "All",
             ],
         ),
+        "ignore_cves": attr.string_list(
+            doc = "Ignore vulnerabilities named in this list.",
+            default = [],
+        ),
         "only_fixed": attr.bool(
             doc = "Ignore vulnerabilities that have not been fixed.",
             default = False,
@@ -264,8 +276,9 @@ def grype_test(
     name,
     image = None,
     sbom = None,
-    only_fixed = False,
     database = None,
+    ignore_cves = [],
+    only_fixed = False,
     fail_on_severity = "low",
     scope = "Squashed",
     **kwargs,
@@ -289,10 +302,12 @@ def grype_test(
 
     Args:
         name: the name of the label to be created.
-        image: the complete docker image TAR, compatible with `docker save`;
-            a label for a `container_image` rule; or a label for an imported
-            image (i.e., `@foo//image` for a
-            `container_pull(name = "foo", ...)` repository rule.
+        image: the complete docker image TAR, compatible with `docker save`.
+            For a `container_image` target `:foo`, this would be `:foo.tar`,
+            or for a `container_pull` repository `bar`, this would be
+            `@bar//image:image.tar`. Referencing either of those targets
+            directly, e.g., `:foo` or `@bar//image` will work by attempting
+            to rewrite the label to tha appropriate `TAR` file.
         sbom: the Anchore Syft SBOM of the image, formatted as JSON. See
             `syft_sbom` rule.
         database: the Anchore CVE database against which to evaluate the image
@@ -304,6 +319,9 @@ def grype_test(
         only_fixed: if True, ignore any vulnerabilities that do not have
             fixes available, even if they are above the failure threshold.
             Defaults to False.
+        ignore_cves: a list of strings representing CVEs that may exist
+            in the image under test without being considered a failure,
+            regardless of their severity.
         scope: if "Squashed", only scan the effective file system of
             the final image. If "All", scan every file in each layer,
             including those that are overwritten or deleted in the final
@@ -334,6 +352,7 @@ def grype_test(
         sbom = sbom,
         fail_on_severity = fail_on_severity,
         scope = scope,
+        ignore_cves = ignore_cves,
         database = database,
         only_fixed = only_fixed,
         grype_ = select({
