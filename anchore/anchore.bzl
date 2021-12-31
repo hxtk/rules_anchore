@@ -147,7 +147,6 @@ def _grype_test_impl(ctx):
         auto_update = "false"
 
     ignore_cves = '[' + ", ".join(["vulnerability: '" + cve + "'" for cve in ctx.attr.ignore_cves]) + ']'
-    print(ignore_cves)
 
     config_file = ctx.actions.declare_file(ctx.label.name + "-config.yaml")
     ctx.actions.write(
