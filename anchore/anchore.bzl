@@ -129,6 +129,7 @@ $RUNFILES_DIR/{grype} {imgtype}:$RUNFILES_DIR/{image} --config $RUNFILES_DIR/{co
 _grype_config = """
 db:
   auto-update: {auto_update}
+  cache-dir: "$RUNFILES_DIR/grype-db"
 """
 
 def _grype_test_impl(ctx):
