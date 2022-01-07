@@ -42,7 +42,15 @@ anchore_extra_deps()
 
 ## Usage
 
-Basic example:
+Below is a minimal example, representing the simplest configuration that will
+accurately detect "high" and "critical" CVEs with known fixes.
+
+The resulting test is flakey and not cache-friendly because it fetches the
+latest CVE database every time it runs. This also makes it rather slow.
+
+A more complete configuration using an explicitly declared external database
+with automated tooling to update that declaration on a regular basis is
+recommended, and is shown elsewhere in greater detail.
 
 ```starlark
 container_image(
@@ -127,9 +135,18 @@ schedule in that example.
 
 This repository's releases are versioned with
 [Semantic Versioning](https://semver.org/). It is intended that, for example,
-any repository set up with v2.0.0 can change nothing but the `http_archive`
-rule in their WORKSPACE dependencies to upgrade it to any v2.y.z, and
-everything that worked with v2.0.0 will continue to work.
+any repository set up with v2.0.0 can change nothing but the WORKSPACE
+declaration included in the release notes and continue to work with any
+v2.y.z with no changes to any `BUILD` files.
+
+When the first few releases were published, a different policy was in use which
+stated WORKSPACE declaration compatibility as the goal. The change which caused
+v1 to increment to v2 was a change that affected `WORKSPACE` declarations.
+That marker is no longer a target because it is assumed that anyone upgrading
+is already looking at the release notes to get the newest `http_archive`
+declaration, and incrementing the major version on those sorts of changes
+takes away the ability to communicate breaking changes to `BUILD` declarations
+through the version number.
 
 Additionally, to avoid the risk of accidentally implementing
 [0ver](https://0ver.org/) instead of semver, the first release was v1.0.0. If
