@@ -4,6 +4,7 @@ go_library(
     name = "lib",
     srcs = ["main.go"],
     importpath = "github.com/hxtk/rules_anchore/tools/grype_updater",
+    deps = ["@bazel_gazelle//rule"],
 )
 
 go_binary(

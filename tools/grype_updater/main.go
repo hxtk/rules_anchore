@@ -1,20 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
 	"path"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
 var (
@@ -26,9 +25,7 @@ var (
 )
 
 const (
-	startDelimiter = "# com_github_hxtk_rules_anchore managed block; DO NOT EDIT"
-	loadStatement  = `load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")`
-	endDelimiter   = "# END com_github_hxtk_rules_anchore managed block"
+	startDelimiter = "# com_github_hxtk_rules_anchore managed rule; DO NOT EDIT"
 )
 
 type item struct {
@@ -126,136 +123,69 @@ func writeOutput(entry *httpFile, outStr string) {
 		parts = strings.Split(outStr, "%")
 	}
 
-	managedBlock := startDelimiter + "\n"
+	var managedBlock string
 	if len(parts) >= 2 {
 		managedBlock += fmt.Sprintf("def %s():\n", parts[1])
 		managedBlock += indent(entry.String(), "    ")
 	} else {
 		managedBlock += entry.String()
 	}
-	managedBlock += endDelimiter + "\n"
 
 	// If the file name was "-", we print to stdout and return.
 	if parts[0] == "-" {
-		fmt.Println(loadStatement)
 		fmt.Print(managedBlock)
 		return
 	}
 
 	filePath := path.Join(os.Getenv("BUILD_WORKSPACE_DIRECTORY"), parts[0])
-	f, err := os.Open(filePath)
-	if os.IsNotExist(err) {
-		// If the output file did not exist, we create it and write to it directly.
-		f, err := os.Create(filePath)
-		if err != nil {
-			log.Fatalf("Error creating output file: %v.", err)
+	var file *rule.File
+	var err error
+	if len(parts) == 1 {
+		file, err = rule.LoadWorkspaceFile(filePath, "")
+		if os.IsNotExist(err) {
+			file = rule.EmptyFile(filePath, "")
+			err = nil
 		}
-		defer f.Close()
-
-		_, err = io.WriteString(f, loadStatement+"\n")
-		if err != nil {
-			log.Fatalf("Error writing output to file: %v.", err)
+	} else if len(parts) == 2 {
+		file, err = rule.LoadMacroFile(filePath, "", parts[1])
+		if os.IsNotExist(err) {
+			file, err = rule.EmptyMacroFile(filePath, "", parts[1])
 		}
-
-		_, err = io.WriteString(f, managedBlock)
-		if err != nil {
-			log.Fatalf("Error writing output to file: %v.", err)
-		}
-		return
-	} else if err != nil {
+	} else {
+		log.Fatalf("Expected output of the form WORKSPACE or test.bzl%macroName.")
+	}
+	if err != nil {
 		log.Fatalf("Error opening output file: %v.", err)
 	}
-	defer f.Close()
 
-	// We write to a temporary file so that we don't have to store the file in RAM:
-	// some generated dependency files can be quite large. This also minimizes the risk
-	// that the end result will be a corrupted file because we only replace the original
-	// file as an atomic operation after the new file has been generated.
-	temp, err := os.CreateTemp(path.Dir(filePath), path.Base(filePath)+"-*")
-	if err != nil {
-		log.Fatalf("Error creating temporary file: %v.", err)
-	}
-
-	if hasLoad, err := hasLoadStatement(f); err != nil {
-		log.Fatalf("Error checking for load statement: %v.", err)
-	} else if !hasLoad {
-		_, err = fmt.Fprintln(temp, loadStatement)
-		if err != nil {
-			log.Fatalf("Error writing output to file: %v.", err)
+	grypeRule := rule.NewRule("http_file", entry.name)
+	grypeRule.SetAttr("sha256", entry.sha256)
+	grypeRule.SetAttr("urls", []string{entry.url})
+	grypeRule.AddComment(startDelimiter)
+	for _, v := range file.Rules {
+		if v.Name() == entry.name {
+			v.Delete()
 		}
 	}
+	file.Sync()
 
-	_, err = f.Seek(0, io.SeekStart)
-	if err != nil {
-		log.Fatalf("Error seeking start of file: %v.", err)
-	}
-
-	// We copy the original file line by line, searching for our managed block.
-	// When we encounter the managed block in the original file, we skip it
-	// and write our newly-generated managed block to the output file.
-	scanner := bufio.NewScanner(f)
-	written := false
-	for scanner.Scan() {
-		if scanner.Text() == startDelimiter {
-			_, err := io.WriteString(temp, managedBlock)
-			if err != nil {
-				log.Fatalf("Error writing output to file: %v.", err)
-			}
-			written = true
-			for scanner.Text() != endDelimiter && scanner.Scan() {
-				continue
-			}
-			scanner.Scan()
-			if err := scanner.Err(); err != nil {
-				log.Fatalf("Error reading original file: %v.", err)
-			}
-		}
-		_, err := fmt.Fprintln(temp, scanner.Text())
-		if err != nil {
-			log.Fatalf("Error writing output file: %v.", err)
-		}
-	}
-	if err := scanner.Err(); err != nil {
-		log.Fatalf("Error reading original file: %v.", err)
-	}
-
-	// If the original file existed but did not contain our managed block
-	// delimiter, then there wouldn't have been anything to replace with our
-	// new managed block. In this instance, we just write our managed block
-	// to the end of the new file.
-	if !written {
-		_, err := io.WriteString(temp, managedBlock)
-		if err != nil {
-			log.Fatalf("Error writing output to file: %v.", err)
-		}
-	}
-
-	// Now that the replacement file has been totally generated, we delete
-	// the original. If this fails, we tell the user where to find the new
-	// file.
-	err = os.Remove(filePath)
-	if err != nil {
-		log.Fatalf(
-			"Error deleting original file: %v; new version exists at %q.",
-			err,
-			temp.Name(),
-		)
-	}
-
-	// Finally, we rename the new file onto the old one.
-	err = os.Rename(temp.Name(), f.Name())
-	if err != nil {
-		log.Fatalf("Error renaming new file: %v.", err)
-	}
+	grypeRule.Insert(file)
+	file.Save(filePath)
 }
 
-func hasLoadStatement(f io.Reader) (bool, error) {
-	data, err := io.ReadAll(f)
-	if err != nil {
-		return false, err
+func addLoad(file *rule.File) {
+	for _, v := range file.Loads {
+		if v.Name() == "@bazel_tools//tools/build_defs/repo:http.bzl" {
+			v.Add("http_file")
+			file.Sync()
+			return
+		}
 	}
 
-	return loadStatementRegex.Match(data), nil
+	load := rule.NewLoad("@bazel_tools//tools/build_defs/repo:http.bzl")
+	load.Add("http_file")
+	load.Insert(file, 1)
+	file.Sync()
 }
 
 func getHTTPFile(items []item) (*httpFile, error) {
@@ -272,10 +202,4 @@ func getHTTPFile(items []item) (*httpFile, error) {
 		}, nil
 	}
 	return nil, fmt.Errorf("no well-formed entries found")
-}
-
-var loadStatementRegex *regexp.Regexp
-
-func init() {
-	loadStatementRegex = regexp.MustCompile(`(?m)^load\([\n\s]*"@bazel_tools//tools/build_defs/repo:http\.bzl"[\n\s]*,([\n\s]*([a-zA-Z0-9_]+[\n\s]*=[\n\s]*)?"[a-zA-Z0-9_-]+"[\n\s]*,)*[\n\s]*(http_file[\n\s]*=[\n\s]*)?"http_file"[\s\n]*(,?[\s\n]*\)|,[\s\n]*([\n\s]*([a-zA-Z0-9_]+[\n\s]*=[\n\s]*)?"[a-zA-Z0-9_-]+"[\n\s]*,)*[\s\n]*([\n\s]*([a-zA-Z0-9_]+[\n\s]*=[\n\s]*)?"[a-zA-Z0-9_-]+"[\n\s]*)?\))$`)
 }

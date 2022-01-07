@@ -133,3 +133,20 @@ def anchore_deps():
         ],
     )
 
+    _maybe(
+        http_archive,
+        name = "bazel_gazelle",
+        sha256 = "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+        ],
+    )
+
+    _maybe(
+        http_archive,
+        name = "com_google_protobuf",
+	sha256 = "25f1292d4ea6666f460a2a30038eef121e6c3937ae0f61d610611dfb14b0bd32",
+        strip_prefix = "protobuf-3.19.1",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.19.1.zip"],
+    )
