@@ -12,9 +12,3 @@ go_binary(
     embed = [":lib"],
     visibility = ["//visibility:public"],
 )
-
-go_test(
-    name = "go_default_test",
-    srcs = ["main_test.go"],
-    embed = [":lib"],
-)
