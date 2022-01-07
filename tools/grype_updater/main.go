@@ -122,6 +122,10 @@ func main() {
 func writeOutput(entry *httpFile, outStr string) {
 	// Generate the managed block.
 	parts := strings.Split(outStr, "#")
+	if len(parts) == 1 {
+		parts = strings.Split(outStr, "%")
+	}
+
 	managedBlock := startDelimiter + "\n"
 	if len(parts) >= 2 {
 		managedBlock += fmt.Sprintf("def %s():\n", parts[1])
