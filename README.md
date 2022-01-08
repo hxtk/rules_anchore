@@ -137,16 +137,12 @@ This repository's releases are versioned with
 [Semantic Versioning](https://semver.org/). It is intended that, for example,
 any repository set up with v2.0.0 can change nothing but the WORKSPACE
 declaration included in the release notes and continue to work with any
-v2.y.z with no changes to any `BUILD` files.
-
-When the first few releases were published, a different policy was in use which
-stated WORKSPACE declaration compatibility as the goal. The change which caused
-v1 to increment to v2 was a change that affected `WORKSPACE` declarations.
-That marker is no longer a target because it is assumed that anyone upgrading
-is already looking at the release notes to get the newest `http_archive`
-declaration, and incrementing the major version on those sorts of changes
-takes away the ability to communicate breaking changes to `BUILD` declarations
-through the version number.
+v2.y.z with no changes to any `BUILD` files. The major version **SHOULD**
+increment on WORKSAPCE declaration changes when those changes will affect
+compatibility (e.g., the increment from v1 to v2 was because we stopped
+building the Grype™ and Syft™ binaries from source, which meant the tool
+was no longer compatible with platforms for which pre-compiled binaries were
+not available).
 
 Additionally, to avoid the risk of accidentally implementing
 [0ver](https://0ver.org/) instead of semver, the first release was v1.0.0. If
