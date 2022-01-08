@@ -95,6 +95,7 @@ grype_updater_ = rule(
 
 def grype_updater(
     name,
+    output = "WORKSPACE",
     version = 3,
     repository_name = "grype_database",
     listing_url = None,
@@ -112,13 +113,23 @@ def grype_updater(
 
     grype_updater(
         name = "update_grype",
-        output = "deps.bzl#grype_database",
+        output = "deps.bzl%grype_db",
     )
     ```
 
     Args:
         name: the name of the label to be created. This is the target you will
             invoke with `bazel run`.
+        output: the WORKSPACE or macro file in which the repository rule shall
+            be defined. If a macro file is specified, use "%" followed by some
+            name to indicate the name of the macro to be created, e.g., from
+            the example above `deps.bzl%grype_database` will result in deps.bzl
+            containing a `grype_db` macro which, when called, will define
+            the repository rule for a Grype CVE database. This is consistent with
+            the definitions used in `bazel-gazelle`. Previously, the canonical
+            separator was "#". It is preserved for compatibility. If no
+            separator is used, the repository will be defined at the top level
+            of whatever file is specified.
         version: the database format major version. This should generally be left
             as the default, as it must be chosen to be compatible with the version
             of Grype in this package.
@@ -134,6 +145,7 @@ def grype_updater(
 
     grype_updater_(
         name = name,
+        output = output,
         version = version,
         repo_name = repository_name,
         listing_url = listing_url,
