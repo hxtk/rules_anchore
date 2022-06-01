@@ -30,6 +30,7 @@ grype_test(
     image = ":server_image.tar",
     only_fixed = True,
     tags = [
+        "manual",
         "large",
     ],
 )
