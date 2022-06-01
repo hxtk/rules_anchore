@@ -19,9 +19,12 @@ grype_test(
     name = "fail_on_severity_test",
     image = ":server_image",
     database = "@grype_database//file",
-    fail_on_severity = "high",
+    fail_on_severity = "critical",
     ignore_cves = [
         "CVE-2021-33574",
+	"CVE-2022-23218",
+	"CVE-2022-23219",
+	"CVE-2022-1292",
     ],
     tags = [
         "large",
@@ -35,6 +38,7 @@ grype_test(
     only_fixed = True,
     tags = [
         "large",
+	"manual",
     ],
 )
 
