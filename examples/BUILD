@@ -28,6 +28,7 @@ grype_test(
     ],
     tags = [
         "large",
+	"manual",
     ],
 )
 
