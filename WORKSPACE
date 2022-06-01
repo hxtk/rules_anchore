@@ -48,6 +48,6 @@ http_file(
 # com_github_hxtk_rules_anchore managed rule; DO NOT EDIT
 http_file(
     name = "grype_database",
-    sha256 = "4ebe46dda03711e6e0c9e02c0daa33a0deff70124cf598caa164d82e83ed24d1",
-    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2022-01-17T08:16:58Z.tar.gz"],
+    sha256 = "aab36a3cd66053720afc8074c1b4017abfe7e13ea9fdf7fd9566b8c9edd478df",
+    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2022-06-01T14:35:04Z_8936049ce6c9b6d895fd.tar.gz"],
 )
