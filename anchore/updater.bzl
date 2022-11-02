@@ -96,7 +96,7 @@ grype_updater_ = rule(
 def grype_updater(
     name,
     output = "WORKSPACE",
-    version = 3,
+    version = 5,
     repository_name = "grype_database",
     listing_url = None,
     **kwargs,

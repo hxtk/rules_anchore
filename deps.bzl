@@ -8,145 +8,145 @@ def anchore_deps():
     http_archive(
         name = "grype_linux_amd64",
         build_file_content = 'exports_files(["grype"], visibility = ["//visibility:public"])',
-        sha256 = "8310224d2ddac10fc344e5cb565586e71416e42f6e0461da37e9ff2c95a59e4a",
+        sha256 = "5f9e8f3ddb914a0252c945468b986236ba9b50a5bd89d8a7d3adfdc1a2ca6834",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.28.0/grype_0.28.0_linux_amd64.tar.gz",
+            "https://github.com/anchore/grype/releases/download/v0.51.0/grype_0.51.0_linux_amd64.tar.gz",
         ],
     )
 
     http_archive(
         name = "grype_linux_arm64",
         build_file_content = 'exports_files(["grype"], visibility = ["//visibility:public"])',
-        sha256 = "5f423868ec56dd6666ad64de03b324bbc3d5bacff7332c042a371201958d082d",
+        sha256 = "2b74e9cf73600d8846822317261da912ed50128202096e4b234372835b54cff2",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.28.0/grype_0.28.0_linux_arm64.tar.gz",
+            "https://github.com/anchore/grype/releases/download/v0.51.0/grype_0.51.0_linux_arm64.tar.gz",
         ],
     )
 
     http_archive(
         name = "grype_darwin_amd64",
         build_file_content = 'exports_files(["grype"], visibility = ["//visibility:public"])',
-        sha256 = "beadfe60b199f3bb22d7618629093f7c14dcea9b957887c42fc225dcfe02dc66",
+        sha256 = "f0687c1cb04e82a676da077570c28dd156ca648c0e3704f319a8ccdda1855876",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.28.0/grype_0.28.0_darwin_amd64.zip",
+            "https://github.com/anchore/grype/releases/download/v0.51.0/grype_0.51.0_darwin_amd64.tar.gz",
         ],
     )
 
     http_archive(
         name = "grype_darwin_arm64",
         build_file_content = 'exports_files(["grype"], visibility = ["//visibility:public"])',
-        sha256 = "de30ff4bff721bf5e3c7d509174e1745b03e1157f8e2c63f4b79848cdf9a4ecc",
+        sha256 = "5de5e687c03ee5b9e8db1ffe987c98abc57c8de3a792b8160d046abb0bca943d",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.28.0/grype_0.28.0_darwin_arm64.zip",
+            "https://github.com/anchore/grype/releases/download/v0.51.0/grype_0.51.0_darwin_arm64.tar.gz",
         ],
     )
 
     http_archive(
         name = "grype_windows",
         build_file_content = 'exports_files(["grype.exe"], visibility = ["//visibility:public"])',
-        sha256 = "4e339eb138ca4269381856dded16d2599b005041a61b8076317f05631fba186b",
+        sha256 = "d126dc36beec2576ad2cc075412de95ad20926212c0ad58d4e2a52d849af4b41",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.28.0/grype_0.28.0_windows_amd64.zip",
+            "https://github.com/anchore/grype/releases/download/v0.51.0/grype_0.51.0_windows_amd64.zip",
         ],
     )
 
     http_archive(
         name = "syft_linux_amd64",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "0efee88a90e46f86be62f45cdeb416d2e0734dcfebc6f4fec6b41bcbbd2645fa",
+        sha256 = "063e5c5a1762f0850363bd05de80d008c7bca3f63d9f98889eba4fddf0f2f488",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.34.0/syft_0.34.0_linux_amd64.tar.gz",
+            "https://github.com/anchore/syft/releases/download/v0.60.1/syft_0.60.1_linux_amd64.tar.gz",
         ],
     )
 
     http_archive(
         name = "syft_linux_arm64",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "fc8e2cee22cc82a69a1919fa0b559f750fa7fca44bc8b576709bc5f2bcab481c",
+        sha256 = "5049a8a909d520a4508e89ee01ae60de3839dbc6c3c09c8b535810f9f08a18e0",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.34.0/syft_0.34.0_linux_arm64.tar.gz",
+            "https://github.com/anchore/syft/releases/download/v0.60.1/syft_0.60.1_linux_arm64.tar.gz",
         ],
     )
 
     http_archive(
         name = "syft_darwin_amd64",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "052915bde04071ec5e60ad20181ff74f9c72d474a857164560a3c7b40dd4a832",
+        sha256 = "a3a4542afdba0139b2f7bbb84e21bdf5e6813acfbe4062a2eb6ae3fb0821da8c",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.34.0/syft_0.34.0_darwin_amd64.tar.gz",
+            "https://github.com/anchore/syft/releases/download/v0.60.1/syft_0.60.1_darwin_amd64.tar.gz",
         ],
     )
 
     http_archive(
         name = "syft_darwin_arm64",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "84dd287cebba6c0278a883dbb233c0ae38b0c9c1d272e01a4c7046bba46a9c07",
+        sha256 = "a03dfb60a782535aced6084c6604a44e7e4ee5cd31c8294089d98ea1aeec3baf",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.34.0/syft_0.34.0_darwin_arm64.zip",
+            "https://github.com/anchore/syft/releases/download/v0.60.1/syft_0.60.1_darwin_arm64.tar.gz",
         ],
     )
 
     http_archive(
         name = "syft_windows",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "ffbaffa938dbb8c3510c59ae0b96bda2d5f90c4ad7af9077d6480fac1ac6efaa",
+        sha256 = "24090b451c9d1e39287e885e28ab011d3178e78ef57bfe719b5d8ca11cdda608",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.34.0/syft_0.34.0_windows_amd64.zip",
+            "https://github.com/anchore/syft/releases/download/v0.60.1/syft_0.60.1_windows_amd64.zip",
         ],
     )
 
     _maybe(
         http_archive,
         name = "io_bazel_stardoc",
-        sha256 = "c9794dcc8026a30ff67cf7cf91ebe245ca294b20b071845d12c192afe243ad72",
+        sha256 = "3fd8fec4ddec3c670bd810904e2e33170bedfe12f90adf943508184be458c8bb",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/stardoc/releases/download/0.5.0/stardoc-0.5.0.tar.gz",
-            "https://github.com/bazelbuild/stardoc/releases/download/0.5.0/stardoc-0.5.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/stardoc/releases/download/0.5.3/stardoc-0.5.3.tar.gz",
+            "https://github.com/bazelbuild/stardoc/releases/download/0.5.3/stardoc-0.5.3.tar.gz",
         ],
     )
 
     _maybe(
         http_archive,
         name = "bazel_skylib",
+        sha256 = "74d544d96f4a5bb630d465ca8bbcfe231e3594e5aae57e1edbf17a6eb3ca2506",
         urls = [
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
         ],
-        sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
     )
 
     _maybe(
         http_archive,
         name = "io_bazel_rules_docker",
-        sha256 = "59536e6ae64359b716ba9c46c39183403b01eabfbd57578e84398b4829ca499a",
-        strip_prefix = "rules_docker-0.22.0",
-        urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.22.0/rules_docker-v0.22.0.tar.gz"],
+        strip_prefix = "rules_docker-0.25.0",
+        sha256 = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf",
+        urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.25.0/rules_docker-v0.25.0.tar.gz"],
     )
 
     _maybe(
         http_archive,
         name = "io_bazel_rules_go",
-        sha256 = "2b1641428dff9018f9e85c0384f03ec6c10660d935b750e3fa1492a281a53b0f",
+        sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.29.0/rules_go-v0.29.0.zip",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.29.0/rules_go-v0.29.0.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
         ],
     )
 
     _maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
+        sha256 = "448e37e0dbf61d6fa8f00aaa12d191745e14f07c31cabfa731f0c8e8a4f41b97",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
         ],
     )
 
     _maybe(
         http_archive,
         name = "com_google_protobuf",
-	sha256 = "25f1292d4ea6666f460a2a30038eef121e6c3937ae0f61d610611dfb14b0bd32",
-        strip_prefix = "protobuf-3.19.1",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.19.1.zip"],
+        strip_prefix = "protobuf-21.9",
+        sha256 = "5babb8571f1cceafe0c18e13ddb3be556e87e12ceea3463d6b0d0064e6cc1ac3",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.9.zip"],
     )
