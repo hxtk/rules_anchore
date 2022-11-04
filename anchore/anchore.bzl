@@ -1,25 +1,36 @@
 def _syft_sbom_impl(ctx):
-    output_file = ctx.actions.declare_file(ctx.label.name + "-sbom.json")
+    outputs = [
+        ctx.outputs.syft_json,
+        ctx.outputs.github_json,
+        ctx.outputs.cyclonedx_json,
+        ctx.outputs.cyclonedx_xml,
+        ctx.outputs.spdx_json,
+        ctx.outputs.spdx_tag_value,
+    ]
 
     args = ctx.actions.args()
     args.add_joined(["docker-archive", ctx.file.image], join_with = ":")
     args.add("--scope", ctx.attr.scope)
-    args.add("--output", "json")
-    args.add("--file", output_file)
+    args.add_joined("--output", ["syft-json", ctx.outputs.syft_json], join_with = "=")
+    args.add_joined("--output", ["github-json", ctx.outputs.github_json], join_with = "=")
+    args.add_joined("--output", ["cyclonedx-json", ctx.outputs.cyclonedx_json], join_with = "=")
+    args.add_joined("--output", ["cyclonedx-xml", ctx.outputs.cyclonedx_xml], join_with = "=")
+    args.add_joined("--output", ["spdx-json", ctx.outputs.spdx_json], join_with = "=")
+    args.add_joined("--output", ["spdx-tag-value", ctx.outputs.spdx_tag_value], join_with = "=")
 
     if ctx.file.config:
         args.add("--config", ctx.file.config)
 
     ctx.actions.run(
         inputs = [ctx.file.image],
-        outputs = [output_file],
+        outputs = outputs,
         executable = ctx.executable.syft_,
         mnemonic = "SyftScan",
         progress_message = "Generating SBOM",
         arguments = [args],
     )
 
-    return [DefaultInfo(files = depset([output_file]))]
+    return [DefaultInfo(files = depset([ctx.outputs.syft_json]))]
 
 _syft_sbom = rule(
     attrs = {
@@ -47,6 +58,12 @@ _syft_sbom = rule(
             executable = True,
             cfg = "exec",
         ),
+        "syft_json": attr.output(),
+        "github_json": attr.output(),
+        "cyclonedx_json": attr.output(),
+        "cyclonedx_xml": attr.output(),
+        "spdx_json": attr.output(),
+        "spdx_tag_value": attr.output(),
     },
     implementation = _syft_sbom_impl,
 )
@@ -94,6 +111,12 @@ def syft_sbom(name, image, scope="Squashed", **kwargs):
         name = name,
         image = image,
         scope = scope,
+        syft_json = name + ".syft.json",
+        github_json = name + ".github.json",
+        cyclonedx_json = name + ".cdx.json",
+        cyclonedx_xml = name + ".cdx.xml",
+        spdx_json = name + ".spdx.json",
+        spdx_tag_value = name + ".spdx",
         syft_ = select({
             "@bazel_tools//src/conditions:host_windows": "@grype_windows//:grype.exe",
             "@bazel_tools//src/conditions:darwin_x86_64": "@grype_darwin_amd64//:grype",
