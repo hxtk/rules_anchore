@@ -1,14 +1,14 @@
 def _syft_sbom_impl(ctx):
     output_file = ctx.actions.declare_file(ctx.label.name + "-sbom.json")
-    args = [
-        "docker-archive:" + ctx.file.image.path,
-        "--scope", ctx.attr.scope,
-        "--output", "json",
-        "--file", output_file.path,
-    ]
+
+    args = ctx.actions.args()
+    args.add_joined(["docker-archive", ctx.file.image], join_with = ":")
+    args.add("--scope", ctx.attr.scope)
+    args.add("--output", "json")
+    args.add("--file", output_file)
 
     if ctx.file.config:
-        args += ["--config", ctx.file.config.path]
+        args.add("--config", ctx.file.config)
 
     ctx.actions.run(
         inputs = [ctx.file.image],
@@ -16,7 +16,7 @@ def _syft_sbom_impl(ctx):
         executable = ctx.executable.syft_,
         mnemonic = "SyftScan",
         progress_message = "Generating SBOM",
-        arguments = args,
+        arguments = [args],
     )
 
     return [DefaultInfo(files = depset([output_file]))]
