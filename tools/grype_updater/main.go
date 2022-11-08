@@ -18,7 +18,7 @@ import (
 
 var (
 	listingURL = flag.String("url", "https://toolbox-data.anchore.io/grype/databases/listing.json", "URL of the Grype CVE Database Listing")
-	dbVersion  = flag.Int("db-version", 3, "Version of the database to fetch.")
+	dbVersion  = flag.Int("db-version", 5, "Version of the database to fetch.")
 	output     = flag.String("output", "WORKSPACE", "File in which to place the generated repository rule, e.g., WORKSPACE, deps.bzl#anchore_db")
 	repoName   = flag.String("repo-name", "grype_database", "Name of the generated repository rule")
 	timeoutStr = flag.String("timeout", "300s", "Time string indicating the maximum duration we are allowed.")
@@ -42,9 +42,10 @@ type listing struct {
 }
 
 type httpFile struct {
-	name   string
-	sha256 string
-	url    string
+	name      string
+	sha256    string
+	url       string
+	extension string
 }
 
 const httpFileString = `http_file(
@@ -53,11 +54,12 @@ const httpFileString = `http_file(
     urls = [
         "%s",
     ],
+    downloaded_file_path = "downloaded.%s",
 )
 `
 
 func (h *httpFile) String() string {
-	return fmt.Sprintf(httpFileString, h.name, h.sha256, h.url)
+	return fmt.Sprintf(httpFileString, h.name, h.sha256, h.url, h.extension)
 }
 
 func indent(str, prefix string) string {
@@ -161,6 +163,7 @@ func writeOutput(entry *httpFile, outStr string) {
 	grypeRule := rule.NewRule("http_file", entry.name)
 	grypeRule.SetAttr("sha256", entry.sha256)
 	grypeRule.SetAttr("urls", []string{entry.url})
+	grypeRule.SetAttr("downloaded_file_path", fmt.Sprintf("downloaded.%s", entry.extension))
 	grypeRule.AddComment(startDelimiter)
 	for _, v := range file.Rules {
 		if v.Name() == entry.name {
@@ -195,10 +198,22 @@ func getHTTPFile(items []item) (*httpFile, error) {
 			log.Printf("Malformed checksum: %q.", v.Checksum)
 			continue
 		}
+		splitURL := strings.Split(v.URL, "/")
+		if len(splitURL) < 2 {
+			log.Printf("Malformed url: %s.", v.URL)
+			continue
+		}
+		fileName := splitURL[len(splitURL)-1]
+		splitFileName := strings.SplitN(fileName, ".", 2)
+		if len(splitFileName) < 2 {
+			log.Printf("Malformed filename: %s.", fileName)
+			continue
+		}
 		return &httpFile{
-			name:   *repoName,
-			sha256: splitSum[1],
-			url:    v.URL,
+			name:      *repoName,
+			sha256:    splitSum[1],
+			url:       v.URL,
+			extension: splitFileName[1],
 		}, nil
 	}
 	return nil, fmt.Errorf("no well-formed entries found")
