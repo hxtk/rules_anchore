@@ -71,9 +71,9 @@ def anchore_deps():
     http_archive(
         name = "syft_darwin_amd64",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "a3a4542afdba0139b2f7bbb84e21bdf5e6813acfbe4062a2eb6ae3fb0821da8c",
+        sha256 = "fa51fe155bc19f047663a6dbd2cc82fd35533a1601be55abb39c50ecff1e461a",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.60.1/syft_0.60.1_darwin_amd64.tar.gz",
+            "https://github.com/anchore/syft/releases/download/v0.83.1/syft_0.83.1_darwin_amd64.tar.gz",
         ],
     )
 
