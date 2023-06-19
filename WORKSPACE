@@ -31,7 +31,7 @@ load(
 
 container_pull(
     name = "distroless_base",
-    digest = "sha256:02f4c952f790848aa6ffee8d241c67e0ac5364931c76a80094348af386076ad4",
+    digest = "sha256:1b2306a7c6e3a2693b730bd2697704650ba71bfa7ba55ee096e8734ae6473f66",
     registry = "gcr.io",
     repository = "distroless/base-debian11",
     tag = "nonroot",
