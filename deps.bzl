@@ -118,7 +118,6 @@ def anchore_deps():
     _maybe(
         http_archive,
         name = "io_bazel_rules_docker",
-        strip_prefix = "rules_docker-0.25.0",
         sha256 = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf",
         urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.25.0/rules_docker-v0.25.0.tar.gz"],
     )
@@ -146,7 +145,7 @@ def anchore_deps():
     _maybe(
         http_archive,
         name = "com_google_protobuf",
-        strip_prefix = "protobuf-21.9",
-        sha256 = "5babb8571f1cceafe0c18e13ddb3be556e87e12ceea3463d6b0d0064e6cc1ac3",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.9.zip"],
+        strip_prefix = "protobuf-23.3",
+        sha256 = "f6ac7f4b735f9b7c50e45cff845e787eeb4acde9a8955542c9f1f7f95ada876f",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v23.3.zip"],
     )
