@@ -12,6 +12,8 @@ jobs:
 #        run: tools/bazel build //...
       - name: Update Documentation
         run: tools/bazel run docs:update
+      - name: Update local repo
+        run:  git fetch --all && git pull
       - name: Commit updated documentation
         uses: github-actions-x/commit@v2.9
         with:
