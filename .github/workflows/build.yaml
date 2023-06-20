@@ -8,22 +8,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-#      - name: Build
-#        run: tools/bazel build //...
-      - name: Update Documentation
-        run: tools/bazel run docs:update
-      - name: Update local repo
-        run:  git fetch --all && git pull
-      - name: Commit updated documentation
-        uses: github-actions-x/commit@v2.9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'main'
-          commit-message: 'Update documentation'
-          force-add: 'true'
-          files: docs/anchore.md
-          name: Github Actions
-          email: github-actions@psanders.me
+      - name: Build
+        run: tools/bazel build //...
+#      - name: Update Documentation
+#        run: tools/bazel run docs:update
+#      - name: Update local repo
+#        run:  git fetch --all && git pull
+#      - name: Commit updated documentation
+#        uses: github-actions-x/commit@v2.9
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          push-branch: 'main'
+#          commit-message: 'Update documentation'
+#          force-add: 'true'
+#          files: docs/anchore.md
+#          name: Github Actions
+#          email: github-actions@psanders.me
       - name: Test
         run: tools/bazel test //...
 
