@@ -44,9 +44,9 @@ def anchore_deps():
     http_archive(
         name = "grype_windows",
         build_file_content = 'exports_files(["grype.exe"], visibility = ["//visibility:public"])',
-        sha256 = "d75c33233053bd391d13d0cf7397d9267b7d5c276b67d18eb35226a12929a4d2",
+        sha256 = "110f9d2a07a46d855bd53dc6228de88cce0724df5f586e4b6fee11f9471284b8",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.62.3/grype_0.62.3_windows_amd64.zip",
+            "https://github.com/anchore/grype/releases/download/v0.63.0/grype_0.63.0_windows_amd64.zip",
         ],
     )
 
