@@ -5,7 +5,7 @@ Generated API documentation for Anchore rules.
 
 Load these from `@com_github_hxtk_rules_anchore//anchore:defs.bzl`.
 
-<a id="#grype_test"></a>
+<a id="grype_test"></a>
 
 ## grype_test
 
@@ -47,7 +47,7 @@ Anchore's database.
 | <a id="grype_test-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
-<a id="#grype_updater"></a>
+<a id="grype_updater"></a>
 
 ## grype_updater
 
@@ -79,13 +79,13 @@ grype_updater(
 | :------------- | :------------- | :------------- |
 | <a id="grype_updater-name"></a>name |  the name of the label to be created. This is the target you will invoke with <code>bazel run</code>.   |  none |
 | <a id="grype_updater-output"></a>output |  the WORKSPACE or macro file in which the repository rule shall be defined. If a macro file is specified, use "%" followed by some name to indicate the name of the macro to be created, e.g., from the example above <code>deps.bzl%grype_database</code> will result in deps.bzl containing a <code>grype_db</code> macro which, when called, will define the repository rule for a Grype CVE database. This is consistent with the definitions used in <code>bazel-gazelle</code>. Previously, the canonical separator was "#". It is preserved for compatibility. If no separator is used, the repository will be defined at the top level of whatever file is specified.   |  <code>"WORKSPACE"</code> |
-| <a id="grype_updater-version"></a>version |  the database format major version. This should generally be left as the default, as it must be chosen to be compatible with the version of Grype in this package.   |  <code>3</code> |
+| <a id="grype_updater-version"></a>version |  the database format major version. This should generally be left as the default, as it must be chosen to be compatible with the version of Grype in this package.   |  <code>5</code> |
 | <a id="grype_updater-repository_name"></a>repository_name |  the name of the repository to be created. You will reference the database as <code>@[repository_name]//file</code> in the <code>database</code> field of a <code>grype_test</code> rule. For example, with the default value, you would use <code>@grype_database//file</code>.   |  <code>"grype_database"</code> |
 | <a id="grype_updater-listing_url"></a>listing_url |  the URL from which the list of available databases shall be fetched. Defaults to the Anchore listing normally used by Grype.   |  <code>None</code> |
 | <a id="grype_updater-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
-<a id="#syft_sbom"></a>
+<a id="syft_sbom"></a>
 
 ## syft_sbom
 
