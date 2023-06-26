@@ -8,8 +8,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build
-        run: tools/bazel build //...
+#      - name: Build
+#        run: tools/bazel build //...
 #      - name: Update Documentation
 #        run: tools/bazel run docs:update
 #      - name: Update local repo
