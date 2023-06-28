@@ -26,9 +26,9 @@ def anchore_deps():
     http_archive(
         name = "grype_darwin_amd64",
         build_file_content = 'exports_files(["grype"], visibility = ["//visibility:public"])',
-        sha256 = "d3ce446526a4cafb55d4b25de9cdb4bab8f30a141a12ad0875cef9f105cf3477",
+        sha256 = "514582c3414425fd96f18de5960f8b3694b442c9c2d206758acebccaa2220b35",
         urls = [
-            "https://github.com/anchore/grype/releases/download/v0.62.3/grype_0.62.3_darwin_amd64.tar.gz",
+            "https://github.com/anchore/grype/releases/download/v0.63.0/grype_0.63.0_darwin_amd64.tar.gz",
         ],
     )
 
