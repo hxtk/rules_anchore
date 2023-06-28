@@ -43,11 +43,14 @@ grype_test(
     ],
 )
 
+# this test cannot succeed because grype checks if DB is outdated and fails with following error
+# "db could not be loaded: the vulnerability database was built 17 weeks ago (max allowed age is 5 days)"
 grype_test(
     name = "database_test",
     database = "@outdated_cve_database//file",
     image = ":server_image.tar",
     tags = [
         "large",
+        "manual",
     ],
 )

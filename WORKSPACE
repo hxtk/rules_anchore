@@ -41,6 +41,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
     name = "outdated_cve_database",
+    downloaded_file_path = "downloaded.tar.gz",
     sha256 = "1ba68ee63e057d09a8529b603a4b85a38851258fe9625c1594014a3f1f6549a7",
     urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-02-25T08:13:48Z_053525c019d8fb8ae3e7.tar.gz"],
 )
