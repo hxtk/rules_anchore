@@ -89,9 +89,9 @@ def anchore_deps():
     http_archive(
         name = "syft_windows",
         build_file_content = 'exports_files(["syft"], visibility = ["//visibility:public"])',
-        sha256 = "035fdcc70f38479de7a3d67525f5154e2acd9748e92fe37ef1814766f478b59b",
+        sha256 = "39f90587629f32681ba22a03de6c996d4c4c94f3266e09ae6a472fd127176e07",
         urls = [
-            "https://github.com/anchore/syft/releases/download/v0.83.1/syft_0.83.1_windows_amd64.zip",
+            "https://github.com/anchore/syft/releases/download/v0.84.0/syft_0.84.0_windows_amd64.zip",
         ],
     )
 
