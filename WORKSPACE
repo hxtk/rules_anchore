@@ -41,13 +41,15 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
     name = "outdated_cve_database",
-    sha256 = "9721e633543bb663814fad30a6f84f8f5de2fedcaaaea42547490ffb18e1f360",
-    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2021-06-01T20:56:41Z.tar.gz"],
+    downloaded_file_path = "downloaded.tar.gz",
+    sha256 = "1ba68ee63e057d09a8529b603a4b85a38851258fe9625c1594014a3f1f6549a7",
+    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-02-25T08:13:48Z_053525c019d8fb8ae3e7.tar.gz"],
 )
 
 # com_github_hxtk_rules_anchore managed rule; DO NOT EDIT
 http_file(
     name = "grype_database",
-    sha256 = "aab36a3cd66053720afc8074c1b4017abfe7e13ea9fdf7fd9566b8c9edd478df",
-    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2022-06-01T14:35:04Z_8936049ce6c9b6d895fd.tar.gz"],
+    downloaded_file_path = "downloaded.tar.gz",
+    sha256 = "2d43a93d669ac7f87fffc734ea36d060154a9b733e4fbd67d1120f90c9f1b545",
+    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-06-26T01:34:10Z_e1fc7f13cb89ab4bd9d7.tar.gz"],
 )

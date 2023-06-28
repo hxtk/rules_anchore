@@ -1,12 +1,12 @@
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-load("//anchore:defs.bzl", "syft_sbom", "grype_test")
+load("//anchore:defs.bzl", "grype_test", "syft_sbom")
 
 grype_test(
     name = "basic_test",
     image = "@distroless_base//image",
     tags = [
-        "manual",
         "large",
+        "manual",
     ],
 )
 
@@ -17,37 +17,40 @@ container_image(
 
 grype_test(
     name = "fail_on_severity_test",
-    image = ":server_image",
     database = "@grype_database//file",
     fail_on_severity = "critical",
     ignore_cves = [
         "CVE-2021-33574",
-	"CVE-2022-23218",
-	"CVE-2022-23219",
-	"CVE-2022-1292",
+        "CVE-2022-23218",
+        "CVE-2022-23219",
+        "CVE-2022-1292",
     ],
+    image = ":server_image",
     tags = [
         "large",
-	"manual",
+        "manual",
     ],
 )
 
 grype_test(
     name = "only_fixed_test",
-    image = ":server_image.tar",
     database = "@grype_database//file",
+    image = ":server_image.tar",
     only_fixed = True,
     tags = [
         "large",
-	"manual",
+        "manual",
     ],
 )
 
+# this test cannot succeed because grype checks if DB is outdated and fails with following error
+# "db could not be loaded: the vulnerability database was built 17 weeks ago (max allowed age is 5 days)"
 grype_test(
     name = "database_test",
-    image = ":server_image.tar",
     database = "@outdated_cve_database//file",
+    image = ":server_image.tar",
     tags = [
         "large",
+        "manual",
     ],
 )
