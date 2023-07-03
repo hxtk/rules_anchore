@@ -50,6 +50,6 @@ http_file(
 http_file(
     name = "grype_database",
     downloaded_file_path = "downloaded.tar.gz",
-    sha256 = "f0bf6f29b90eaafce965a17b20d4d11d77ef1f7fcdae47e5d43ba1a9e0925f38",
-    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-06-28T01:33:40Z_c4156260412d47be1f30.tar.gz"],
+    sha256 = "14717fdf10e494a00f950de213644ac21f3d65683d44312b674f65755066456c",
+    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-07-03T01:31:54Z_96758ca8e750cdcde4be.tar.gz"],
 )
