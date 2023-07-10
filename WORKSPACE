@@ -31,7 +31,7 @@ load(
 
 container_pull(
     name = "distroless_base",
-    digest = "sha256:02f4c952f790848aa6ffee8d241c67e0ac5364931c76a80094348af386076ad4",
+    digest = "sha256:1b2306a7c6e3a2693b730bd2697704650ba71bfa7ba55ee096e8734ae6473f66",
     registry = "gcr.io",
     repository = "distroless/base-debian11",
     tag = "nonroot",
@@ -41,13 +41,15 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
     name = "outdated_cve_database",
-    sha256 = "9721e633543bb663814fad30a6f84f8f5de2fedcaaaea42547490ffb18e1f360",
-    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2021-06-01T20:56:41Z.tar.gz"],
+    downloaded_file_path = "downloaded.tar.gz",
+    sha256 = "1ba68ee63e057d09a8529b603a4b85a38851258fe9625c1594014a3f1f6549a7",
+    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-02-25T08:13:48Z_053525c019d8fb8ae3e7.tar.gz"],
 )
 
 # com_github_hxtk_rules_anchore managed rule; DO NOT EDIT
 http_file(
     name = "grype_database",
-    sha256 = "aab36a3cd66053720afc8074c1b4017abfe7e13ea9fdf7fd9566b8c9edd478df",
-    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v3_2022-06-01T14:35:04Z_8936049ce6c9b6d895fd.tar.gz"],
+    downloaded_file_path = "downloaded.tar.gz",
+    sha256 = "00cf94c53ccceb8ec55a08418f190a090515b9d898ef0aa5cae437e29b26f5e0",
+    urls = ["https://toolbox-data.anchore.io/grype/databases/vulnerability-db_v5_2023-07-09T01:32:52Z_ce3efc2f77fd721e5c03.tar.gz"],
 )

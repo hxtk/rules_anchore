@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Update Grype
         run: tools/bazel run //:update-grype
       - name: Rerun CVE Scans
         run: tools/bazel test //...
       - name: Commit updated database
-        uses: github-actions-x/commit@v2.8
+        uses: github-actions-x/commit@v2.9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: 'main'

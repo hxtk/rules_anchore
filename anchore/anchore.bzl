@@ -130,6 +130,7 @@ _grype_config = """
 db:
   auto-update: {auto_update}
   cache-dir: "$RUNFILES_DIR/grype-db"
+  validate-age: {validate_age}
 ignore: {ignore_cves}
 """
 
@@ -146,6 +147,10 @@ def _grype_test_impl(ctx):
     if ctx.file.database:
         auto_update = "false"
 
+    validate_age = "true"
+    if not ctx.attr.validate_age:
+        validate_age = "false"
+
     ignore_cves = '[' + ", ".join(["vulnerability: '" + cve + "'" for cve in ctx.attr.ignore_cves]) + ']'
 
     config_file = ctx.actions.declare_file(ctx.label.name + "-config.yaml")
@@ -154,7 +159,8 @@ def _grype_test_impl(ctx):
         is_executable = False,
         content = _grype_config.format(
             auto_update=auto_update,
-            ignore_cves=ignore_cves
+            ignore_cves=ignore_cves,
+            validate_age=validate_age
 	),
     )
 
@@ -265,6 +271,7 @@ _grype_test = rule(
             executable = True,
             cfg = "target",
         ),
+        "validate_age": attr.bool(mandatory = False, default = True),
         "is_windows": attr.bool(mandatory = True),
     },
     test = True,
