@@ -95,11 +95,11 @@ def syft_sbom(name, image, scope="Squashed", **kwargs):
         image = image,
         scope = scope,
         syft_ = select({
-            "@bazel_tools//src/conditions:host_windows": "@grype_windows//:grype.exe",
-            "@bazel_tools//src/conditions:darwin_x86_64": "@grype_darwin_amd64//:grype",
-            "@bazel_tools//src/conditions:darwin_arm64": "@grype_darwin_arm64//:grype",
+            "@bazel_tools//src/conditions:host_windows": "@syft_windows//:syft.exe",
+            "@bazel_tools//src/conditions:darwin_x86_64": "@syft_darwin_amd64//:syft",
+            "@bazel_tools//src/conditions:darwin_arm64": "@syft_darwin_arm64//:syft",
             "@bazel_tools//src/conditions:linux_x86_64": "@syft_linux_amd64//:syft",
-            "@bazel_tools//src/conditions:linux_aarch64": "@grype_linux_arm64//:grype",
+            "@bazel_tools//src/conditions:linux_aarch64": "@syft_linux_arm64//:syft",
         }),
         **kwargs,
     )
@@ -178,7 +178,7 @@ def _grype_test_impl(ctx):
             database = _runfiles_path(ctx, ctx.file.database),
             grype = _runfiles_path(ctx, ctx.executable.grype_),
             severity = ctx.attr.fail_on_severity,
-            config_file = _runfiles_path(ctx, config_file),
+            config = _runfiles_path(ctx, config_file),
             scope = ctx.attr.scope,
             extra = " ".join(extra_args),
         )
